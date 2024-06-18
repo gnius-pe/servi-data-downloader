@@ -1,0 +1,14 @@
+bin/
+build/
+config.yml
+.env
+*.log
+vendor/
+go.sum
+.vscode/
+*.swp
+*.swo
+*.bak
+*.tmp
+.DS_Store
+Thumbs.db
