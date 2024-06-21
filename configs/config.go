@@ -25,14 +25,3 @@ func LoadConfig() {
 	DatabaseName = os.Getenv("DATABASE_NAME")
 	CollectionNameP = os.Getenv("COLLECTION_NAME_P")
 }
-
-/*
-*
-const (
-	ServerPort      = ":3010"
-	MongoURI        = "mongodb+srv://doadmin:607z2e18cw3BEKk4@db-dar-d8c80c07.mongo.ondigitalocean.com"
-	DatabaseName    = "test"
-	CollectionNameP = "testpatients"
-)
-
-*/
