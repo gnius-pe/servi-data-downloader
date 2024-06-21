@@ -2,6 +2,8 @@ package repositories
 
 import (
 	"context"
+	"fmt"
+	"sync"
 
 	"github.com/gnius-pe/servi-data-downloader/configs"
 	"github.com/gnius-pe/servi-data-downloader/models"
@@ -11,10 +13,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var collection *mongo.Collection
+var (
+	collection *mongo.Collection
+	once       sync.Once
+)
 
-func init() {
-	collection = utils.GetCollection(configs.DatabaseName, configs.CollectionName)
+func GetCollection() *mongo.Collection {
+	once.Do(func() {
+		collection = utils.GetCollection(configs.DatabaseName, configs.CollectionNameP)
+		fmt.Println("entroooooo")
+	})
+	return collection
 }
 
 func GetPatientByID(id string) (*models.Patient, error) {
@@ -24,7 +33,7 @@ func GetPatientByID(id string) (*models.Patient, error) {
 	}
 
 	var patient models.Patient
-	err = collection.FindOne(context.TODO(), bson.M{"_id": objectID}).Decode(&patient)
+	err = GetCollection().FindOne(context.TODO(), bson.M{"_id": objectID}).Decode(&patient)
 	if err != nil {
 		return nil, err
 	}

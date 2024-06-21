@@ -12,3 +12,15 @@ go.sum
 *.tmp
 .DS_Store
 Thumbs.db
+*cmd/tmp/
+*tmp/
+
+# Directorio binario
+/bin/
+# Binarios compilados
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test

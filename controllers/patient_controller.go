@@ -7,7 +7,7 @@ import (
 )
 
 func SetupRoutes(app *fiber.App) {
-	app.Get("/api/patient/:id", getPatient)
+	app.Get("/api/patient/downloader/:id", getPatient)
 }
 
 func getPatient(c *fiber.Ctx) error {
