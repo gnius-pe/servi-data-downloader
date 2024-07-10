@@ -16,23 +16,23 @@
     </style>
   </head>
   <body>
-    <h3>${getCurrentDateTime()}</h3>
+    <h3>{{ getCurrentDateTime }}</h3>
     <table style="width: 100%">
       <tr>
-        <td rowspan="4"><img src=https://i.postimg.cc/nrBf4PDY/dar.png alt="cer" width="200" height="80" /></td>
+        <td rowspan="4"><img src="https://i.postimg.cc/nrBf4PDY/dar.png" alt="cer" width="200" height="80" /></td>
         <td colspan="2">Mision "San diego - la Ensenada"</td> 
       </tr>
       <tr>
         <td>Ficha</td>
-        <td>${patient.numberFile}</td>
+        <td>{{ .NumberFile }}</td>
       </tr>
       <tr>
         <td>Registro</td>
-        <td>${patient.personalInformation.numberIdentification}</td>
+        <td>{{ .PersonalInformation.NumberIdentification}}</td>
       </tr>
       <tr>
         <td>Estado</td>
-        <td>${patient.estate}</td>
+        <td>{{ .Estate }}</td>
       </tr>
     </table>
 
@@ -41,13 +41,11 @@
     <table style="width: 100%">
       <tr>
         <td>Registro:</td>
-        <td>${patient.personalInformation.numberIdentification}</td>
+        <td>{{ .PersonalInformation.NumberIdentification}}</td>
         <td>Paciente:</td>
-        <td>${patient.personalInformation.name} ${
-patient.personalInformation.lastName
-}</td>
+        <td>{{ concat .PersonalInformation.Name " " .PersonalInformation.LastName }}</td>
         <td>Edad:</td>
-        <td>${calculateAge(patient.personalInformation.birthDate)}</td>
+        <td>{{ calculateAge .PersonalInformation.BirthDate }}</td>
       </tr>
       <tr>
         <td>Dirección:</td>
@@ -55,39 +53,34 @@ patient.personalInformation.lastName
       </tr>
       <tr>
         <td>Referencia:</td>
-        <td colspan="5">${patient.location.reference}</td>
+        <td colspan="5">{{ .Location.Reference }}</td>
       </tr>
       <tr>
         <td>Distrito:</td>
-        <td>${patient.location.district}</td>
+        <td>{{ .Location.District }}</td>
         <td>Provincia:</td>
-        <td>${patient.location.province}</td>
+        <td>{{ .Location.Province }}</td>
         <td>Departamento:</td>
-        <td>${patient.location.department}</td>
+        <td>{{ .Location.Department }}</td>
       </tr>
       <tr>
         <td>DNI:</td>
-        <td>${patient.personalInformation.numberIdentification}</td>
+        <td>{{ .PersonalInformation.NumberIdentification}}</td>
         <td>Fecha de nacimiento:</td>
-        <td>${parseDate(patient.personalInformation.birthDate)}</td>
+        <td>{{ parseDate .PersonalInformation.BirthDate }}</td>
         <td>Teléfono 01:</td>
-        <td>${patient.personalInformation.firtsNumberPhone}</td>
+        <td>{{ .PersonalInformation.FirstNumberPhone }}</td>
       </tr>
       <tr>
-        <td colspan="6">Areas: ${patient.cita.specialties.map(
-          (mySpecialty) => {
-            return mySpecialty.label;
-          }
-        )}</td>
-        
+        <td colspan="6">Areas: {{ concatenateSpecialtiesLabels .Cita.Specialties }}</td>
       </tr>
       <tr>
         <td>Ficha:</td>
-        <td>${patient.numberFile}</td>
+        <td>{{ .NumberFile }}</td>
         <td>Fecha:</td>
-        <td>${getCurrentDateTime()}</td>
+        <td>{{ getCurrentDateTime }}</td>
         <td>Cert. médico:</td>
-        <td>Si/No</td>
+        <td>{{booleanToString .Question.QuestionExamRecent}}</td>
       </tr>
     </table>
     
@@ -101,13 +94,9 @@ patient.personalInformation.lastName
         </td>
       </tr>
       <tr>
-        <td style="border: none;">Fecha: ${getCurrentDateTime()}</td>
-        <td style="border: none;">Nombre: ${
-          patient.personalInformation.name +
-          " " +
-          patient.personalInformation.lastName
-        }</td>
-        <td style="border: none;">Firma:     ---------------------</td>
+        <td style="border: none;">Fecha: {{ getCurrentDateTime }}</td>
+        <td style="border: none;">Nombre: {{ concat .PersonalInformation.Name " " .PersonalInformation.LastName }}</td>
+        <td style="border: none;">Firma:     ______________________</td>
         <br>
       </tr>
     </table>
@@ -131,25 +120,32 @@ patient.personalInformation.lastName
 
     <table style="width: 100%">
       <tr>
-        <td colspan="2" style="border: none;">A completar por lo profesionales :</td>
+        <td colspan="2" style="border: none;">A completar por lo profesionales : </td>
       </tr>
       <tr>
-        <td >Observaiones/Reenvio : ________________________________________________________________
-          ___________________________________________________________________________________
-          ___________________________________________________________________________________
-          <br>
+        <td style="border-bottom: none; border-top: none;">Observaiones/Reenvio : __________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________<br>
           </td>
       </tr>
       
       <tr>
-        <td>Procedimineto: _______________________________________________________________________
-          ___________________________________________________________________________________
-          ___________________________________________________________________________________
-          ___________________________________________________________________________________
-          ___________________________________________________________________________________
-          ___________________________________________________________________________________
-          ___________________________________________________________________________________
-          ___________________________________________________________________________________</td>
+        <td style="border-bottom: none; border-top: none;">Procedimineto:_________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+          ____________________________________________________________________________________________________________
+        </td>
       </tr>
       
     </table>

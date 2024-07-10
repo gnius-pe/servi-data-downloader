@@ -1,9 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/gnius-pe/servi-data-downloader/configs"
 	"github.com/gnius-pe/servi-data-downloader/controllers"
 	"github.com/gnius-pe/servi-data-downloader/utils"
@@ -13,8 +10,6 @@ import (
 
 func main() {
 	configs.LoadConfig()
-
-	fmt.Println("PATH:", os.Getenv("PATH"))
 	err := utils.ConnectDB()
 	if err != nil {
 		panic(err) // o manejar el error de alguna otra manera
