@@ -28,6 +28,7 @@ RUN apk add --no-cache \
     && tar -xJf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
     && cp wkhtmltox/bin/wkhtmltopdf /usr/local/bin/ \
     && cp -r wkhtmltox/share /usr/local/ \
+    && chmod +x /usr/local/bin/wkhtmltopdf \
     && apk del .build-deps \
     && rm -rf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz wkhtmltox
 
@@ -36,6 +37,12 @@ WORKDIR /app
 
 # Copia el binario de la fase de construcción a la fase de ejecución
 COPY --from=builder /app/main .
+  
+# Copia el archivo .env
+COPY .env .env
+
+# Copia el directorio de plantillas
+COPY templates ./templates
 
 # Expone el puerto en el que tu aplicación escucha
 EXPOSE 3010
