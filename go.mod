@@ -1,6 +1,6 @@
 module github.com/gnius-pe/servi-data-downloader
 
-go 1.22.4
+go 1.20
 
 require (
 	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.9.3 // indirect
