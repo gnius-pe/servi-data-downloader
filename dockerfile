@@ -1,5 +1,5 @@
 # Usa una imagen base oficial de Go para construir la aplicación
-FROM golang:1.20-alpine AS builder
+FROM --platform=linux/amd64 golang:1.20-alpine AS builder
 
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
@@ -12,7 +12,7 @@ RUN go mod tidy
 RUN go build -o main cmd/main.go
 
 # Usa una imagen base de Ubuntu Focal para ejecutar la aplicación y añadir las dependencias necesarias
-FROM ubuntu:focal
+FROM --platform=linux/amd64 ubuntu:focal
 
 # Evita las interacciones con la instalación de paquetes
 ENV DEBIAN_FRONTEND=noninteractive
