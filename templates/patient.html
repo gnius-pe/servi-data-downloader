@@ -13,13 +13,17 @@
         padding: 5px;
         text-align: left;
       }
+      .centered-cell {
+            text-align: center;
+            vertical-align: middle;
+        }
     </style>
   </head>
   <body>
     <h3>{{ getCurrentDateTime }}</h3>
     <table style="width: 100%">
       <tr>
-        <td rowspan="4"><img src="https://i.postimg.cc/nrBf4PDY/dar.png" alt="cer" width="200" height="80" /></td>
+        <td rowspan="4" class="centered-cell"><img src="https://i.postimg.cc/nrBf4PDY/dar.png" alt="cer" width="200" height="80" /></td>
         <td colspan="2">Mision "San diego - la Ensenada"</td> 
       </tr>
       <tr>
@@ -48,7 +52,7 @@
         <td>{{ calculateAge .PersonalInformation.BirthDate }}</td>
       </tr>
       <tr>
-        <td>Dirección:</td>
+        <td>Direccion:</td>
         <td colspan="5">X</td>
       </tr>
       <tr>
@@ -68,7 +72,7 @@
         <td>{{ .PersonalInformation.NumberIdentification}}</td>
         <td>Fecha de nacimiento:</td>
         <td>{{ parseDate .PersonalInformation.BirthDate }}</td>
-        <td>Teléfono 01:</td>
+        <td>Telefono 01:</td>
         <td>{{ .PersonalInformation.FirstNumberPhone }}</td>
       </tr>
       <tr>
@@ -79,7 +83,7 @@
         <td>{{ .NumberFile }}</td>
         <td>Fecha:</td>
         <td>{{ getCurrentDateTime }}</td>
-        <td>Cert. médico:</td>
+        <td>Cert. medico:</td>
         <td>{{booleanToString .Question.QuestionExamRecent}}</td>
       </tr>
     </table>
@@ -88,9 +92,9 @@
       <tr>
         <td colspan="3" style="border-top: 1px solid black; border-bottom: none;">
           Declaro a todos los efectos que estoy de acuerdo con todos los servicios
-          en los que participaré y que autorizo el uso de mi imagen (en fotografía o
+          en los que participare y que autorizo el uso de mi imagen (en fotografia o
           video) en la publicidad del trabajo realizado por la entidad, sin carga
-          alguna para ésta.
+          alguna para esta.
         </td>
       </tr>
       <tr>

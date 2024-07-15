@@ -39,7 +39,7 @@ func getPatient(c *fiber.Ctx) error {
 		return utils.ErrorRespnse(c, fiber.StatusInternalServerError, err.Error())
 	}
 	c.Set("Content-Type", "application/pdf")
-	c.Set("Content-Disposition", "attachment; filename=patient.pdf")
+	c.Set("Content-Disposition", "attachment; filename="+patient.PersonalInformation.Name+"-"+patient.PersonalInformation.NumberIdentification+".pdf")
 	return c.Send(pdf)
 }
 
