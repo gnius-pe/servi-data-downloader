@@ -52,8 +52,5 @@ COPY .env .env
 # Copia el directorio de plantillas
 COPY templates ./templates
 
-# Expone el puerto en el que tu aplicación escucha
-EXPOSE 3010
-
 # Define el comando de inicio de tu aplicación
 CMD ["./main"]
