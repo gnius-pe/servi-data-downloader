@@ -8,3 +8,7 @@ import (
 func GetPatientById(id string) (*models.Patient, error) {
 	return repositories.GetPatientByID(id)
 }
+
+func GetPatientAll() ([]models.Patient, error) {
+	return repositories.GetAllPatients()
+}

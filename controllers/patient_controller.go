@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"bytes"
+	"encoding/csv"
 	"fmt"
 	"html/template"
 	"strings"
@@ -17,6 +18,7 @@ import (
 
 func SetupRoutes(app *fiber.App) {
 	app.Get("/api/patient/downloader/:id", getPatient)
+	app.Get("/api/patient/download/csv", exportCSV)
 }
 
 func getPatient(c *fiber.Ctx) error {
@@ -25,7 +27,6 @@ func getPatient(c *fiber.Ctx) error {
 	if err != nil {
 		return utils.ErrorRespnse(c, fiber.StatusNotFound, err.Error())
 	}
-	fmt.Println(patient.PersonalInformation.BirthDate)
 
 	html, err := renderHTML(patient)
 
@@ -41,6 +42,55 @@ func getPatient(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/pdf")
 	c.Set("Content-Disposition", "attachment; filename="+patient.PersonalInformation.Name+"-"+patient.PersonalInformation.NumberIdentification+".pdf")
 	return c.Send(pdf)
+}
+
+func exportCSV(c *fiber.Ctx) error {
+	patients, err := services.GetPatientAll()
+	if err != nil {
+		return utils.ErrorRespnse(c, fiber.StatusInternalServerError, err.Error())
+	}
+
+	var buffer bytes.Buffer
+	writer := csv.NewWriter(&buffer)
+
+	headers := []string{"ID", "Name", "LastName", "NumberIdentification", "Email", "FirstNumberPhone", "SecondNumberPhone", "Sexo", "BirthDate", "Department", "Province", "District", "Reference", "AppointmentDate", "Specialties", "AppointmentDetail", "QuestionExamRecent", "SpiritualSupport", "FutureActivities", "Estate", "NumberFile", "CreatedAt", "UpdatedAt", "Version"}
+	writer.Write(headers)
+
+	for _, patient := range patients {
+		row := []string{
+			patient.ID.Hex(),
+			patient.PersonalInformation.Name,
+			patient.PersonalInformation.LastName,
+			patient.PersonalInformation.NumberIdentification,
+			patient.PersonalInformation.Email,
+			patient.PersonalInformation.FirstNumberPhone,
+			patient.PersonalInformation.SecondNumberPhone,
+			patient.PersonalInformation.Sexo,
+			patient.PersonalInformation.BirthDate.Time().String(),
+			patient.Location.Department,
+			patient.Location.Province,
+			patient.Location.District,
+			patient.Location.Reference,
+			patient.Cita.AppointmentDate.Time().String(),
+			fmt.Sprintf("%v", patient.Cita.Specialties),
+			patient.Cita.AppointmentDetail,
+			fmt.Sprintf("%v", patient.Question.QuestionExamRecent),
+			fmt.Sprintf("%v", patient.Question.SpiritualSupport),
+			fmt.Sprintf("%v", patient.Question.FutureActivities),
+			patient.Estate,
+			fmt.Sprintf("%d", patient.NumberFile),
+			patient.CreatedAt.Time().String(),
+			patient.UpdatedAt.Time().String(),
+			fmt.Sprintf("%d", patient.Version),
+		}
+		writer.Write(row)
+	}
+
+	writer.Flush()
+
+	c.Set("Content-Type", "text/csv")
+	c.Set("Content-Disposition", "attachment; filename=patients.csv")
+	return c.SendStream(&buffer)
 }
 
 // funciones

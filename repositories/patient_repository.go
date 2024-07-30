@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 	"sync"
 
 	"github.com/gnius-pe/servi-data-downloader/configs"
@@ -21,7 +20,6 @@ var (
 func GetCollection() *mongo.Collection {
 	once.Do(func() {
 		collection = utils.GetCollection(configs.DatabaseName, configs.CollectionNameP)
-		fmt.Println("entroooooo")
 	})
 	return collection
 }
@@ -38,4 +36,19 @@ func GetPatientByID(id string) (*models.Patient, error) {
 		return nil, err
 	}
 	return &patient, nil
+}
+
+func GetAllPatients() ([]models.Patient, error) {
+	cursor, err := GetCollection().Find(context.Background(), bson.D{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	var patients []models.Patient
+	if err = cursor.All(context.Background(), &patients); err != nil {
+		return nil, err
+	}
+
+	return patients, nil
 }
