@@ -16,29 +16,17 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-/*
-*
-
-	func SetupRoutes(app *fiber.App) {
-		app.Get("/api/patient/downloader/:id", getPatient)
-		app.Get("/api/patient/download/csv", exportCSV)
-	}
-*/
 func GetPatient(c *fiber.Ctx) error {
 	id := c.Params("id")
 	patient, err := services.GetPatientById(id)
 	if err != nil {
 		return utils.ErrorRespnse(c, fiber.StatusNotFound, err.Error())
 	}
-
 	html, err := renderHTML(patient)
-
 	if err != nil {
 		return utils.ErrorRespnse(c, fiber.StatusInternalServerError, err.Error())
 	}
-
 	pdf, err := generatePDF(html)
-
 	if err != nil {
 		return utils.ErrorRespnse(c, fiber.StatusInternalServerError, err.Error())
 	}
@@ -52,13 +40,10 @@ func ExportCSV(c *fiber.Ctx) error {
 	if err != nil {
 		return utils.ErrorRespnse(c, fiber.StatusInternalServerError, err.Error())
 	}
-
 	var buffer bytes.Buffer
 	writer := csv.NewWriter(&buffer)
-
 	headers := []string{"ID", "Name", "LastName", "NumberIdentification", "Email", "FirstNumberPhone", "SecondNumberPhone", "Sexo", "BirthDate", "Department", "Province", "District", "Reference", "AppointmentDate", "Specialties", "AppointmentDetail", "QuestionExamRecent", "SpiritualSupport", "FutureActivities", "Estate", "NumberFile", "CreatedAt", "UpdatedAt", "Version"}
 	writer.Write(headers)
-
 	for _, patient := range patients {
 		row := []string{
 			patient.ID.Hex(),
@@ -88,9 +73,7 @@ func ExportCSV(c *fiber.Ctx) error {
 		}
 		writer.Write(row)
 	}
-
 	writer.Flush()
-
 	c.Set("Content-Type", "text/csv")
 	c.Set("Content-Disposition", "attachment; filename=patients.csv")
 	return c.SendStream(&buffer)
@@ -109,31 +92,19 @@ func getCurrentDateTime() string {
 
 // Función para calcular la edad a partir de la fecha de nacimiento
 func calculateAge(birthDate primitive.DateTime) int {
-	// Convertir primitive.DateTime a time.Time
-	birthTime := time.Unix(int64(birthDate)/1000, 0) // Convertir milisegundos a segundos
-
-	// Obtener la fecha actual
+	birthTime := time.Unix(int64(birthDate)/1000, 0)
 	currentTime := time.Now()
-
-	// Calcular la diferencia de años
 	age := currentTime.Year() - birthTime.Year()
-
-	// Ajustar la edad si aún no se ha cumplido el cumpleaños este año
 	if currentTime.YearDay() < birthTime.YearDay() {
 		age--
 	}
-
 	return age
 }
 
 // Función para parsear y formatear una fecha
 func parseDate(date primitive.DateTime) string {
-	// Convertir primitive.DateTime a time.Time
-	timeDate := time.Unix(int64(date)/1000, 0) // Convertir milisegundos a segundos
-
-	// Formatear la fecha como mes día año
+	timeDate := time.Unix(int64(date)/1000, 0)
 	formattedDate := timeDate.Format("07/02/2006")
-
 	return formattedDate
 }
 
@@ -153,13 +124,6 @@ func concatenateSpecialtiesLabels(specialties []models.Specialty) string {
 }
 
 func renderHTML(data interface{}) (string, error) {
-	/**
-	tmpl, err := template.ParseFiles("./templates/patient.html")
-	if err != nil {
-		return "", err
-	}
-	*/
-
 	tmpl := template.Must(template.New("patient.html").Funcs(template.FuncMap{
 		"concat":                       concat,
 		"getCurrentDateTime":           getCurrentDateTime,
@@ -168,7 +132,6 @@ func renderHTML(data interface{}) (string, error) {
 		"booleanToString":              booleanToString,
 		"concatenateSpecialtiesLabels": concatenateSpecialtiesLabels,
 	}).ParseFiles("./templates/patient.html"))
-
 	var html bytes.Buffer
 	if err := tmpl.Execute(&html, data); err != nil {
 		return "", err
@@ -181,14 +144,11 @@ func generatePDF(html string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	page := wkhtmltopdf.NewPageReader(bytes.NewReader([]byte(html)))
 	pdfg.AddPage(page)
-
 	err = pdfg.Create()
 	if err != nil {
 		return nil, err
 	}
-
 	return pdfg.Bytes(), nil
 }
