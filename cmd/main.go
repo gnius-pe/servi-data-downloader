@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gnius-pe/servi-data-downloader/configs"
-	"github.com/gnius-pe/servi-data-downloader/controllers"
+	"github.com/gnius-pe/servi-data-downloader/routes"
 	"github.com/gnius-pe/servi-data-downloader/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -18,6 +18,6 @@ func main() {
 	app := fiber.New()
 	app.Use(logger.New())
 	app.Use(cors.New())
-	controllers.SetupRoutes(app)
+	routes.SetupPatientRoutes(app)
 	app.Listen(configs.ServerPort)
 }

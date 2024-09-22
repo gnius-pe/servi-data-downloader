@@ -16,12 +16,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func SetupRoutes(app *fiber.App) {
-	app.Get("/api/patient/downloader/:id", getPatient)
-	app.Get("/api/patient/download/csv", exportCSV)
-}
+/*
+*
 
-func getPatient(c *fiber.Ctx) error {
+	func SetupRoutes(app *fiber.App) {
+		app.Get("/api/patient/downloader/:id", getPatient)
+		app.Get("/api/patient/download/csv", exportCSV)
+	}
+*/
+func GetPatient(c *fiber.Ctx) error {
 	id := c.Params("id")
 	patient, err := services.GetPatientById(id)
 	if err != nil {
@@ -44,7 +47,7 @@ func getPatient(c *fiber.Ctx) error {
 	return c.Send(pdf)
 }
 
-func exportCSV(c *fiber.Ctx) error {
+func ExportCSV(c *fiber.Ctx) error {
 	patients, err := services.GetPatientAll()
 	if err != nil {
 		return utils.ErrorRespnse(c, fiber.StatusInternalServerError, err.Error())
